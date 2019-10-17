@@ -1,0 +1,128 @@
+! This program calculates the bond lengths between atoms and reports
+! time when
+! any bond reaches 6A.to get the coordinates in a file: grep -A104 "Q
+! !P"
+! output.dat | grep -v -- "^--$" |grep -vE "Q
+! P"> file
+
+        implicit real*8(a-h, o-z)
+        integer, parameter :: columns=1000
+        integer, parameter ::  rows=104
+        character s*2
+        dimension x(columns,rows),y(columns,rows),z(columns,rows)
+        dimension s(columns,rows)
+        dimension r12(columns),r23(columns),r34(columns),r36(columns)
+        dimension r815(1000),r1516(1000),r1518(1000),r1617(1000)
+        dimension r1112(1000),r67(1000),r910(1000),r78(1000),r1011(1000)
+        dimension r1120(1000),r2021(1000),r2122(1000),r2223(1000)
+        dimension r2324(1000), r89(columns)
+        dimension r528(1000),r2559(1000)
+        dimension r456(1000),r457(1000),r458(1000)
+        dimension r2453(1000), r2454(1000),r2455(1000)
+
+!        write(6,*) "5=C-C backbone,  2=C-N backbone,
+!     x  2=N-C backbone,
+!     x  8=side chain C-C,
+!       2=C-N(NH3+)"
+        open(7, file='test.dat')
+        open(17, file='out.dat')
+!       read(5,*)s(i,j), x(i,j),y(i,j),z(i,j)
+!        read(7, FMT="(3(F10.7,3x))") x(i,j),y(i,j),z(i,j)
+!        natom = 5
+       do i=1,5
+!        read(5,*) nst
+        do j=1,3
+!        open(7, file='qcoord.dat')
+        read(7,*) x(i,j),y(i,j),z(i,j)
+!        read(7, FMT="(3(F10.7,3x))") x(i,j),y(i,j),z(i,j)
+        write(6,*) x(i,1),y(i,1),z(i,1)
+        write(6,*) x(i,2), y(i,2),z(i,2)
+        enddo
+!       C-C bonds (backbone)
+        r12(i)= sqrt ((x(i,1)-x(i,2))**2+(y(i,1)-y(i,2))**2 +(z(i,1)&
+        -z(i,2))**2)
+        r23(i)= sqrt ((x(i,2)-x(i,3))**2+(y(i,2)-y(i,3))**2 +(z(i,2)&
+        -z(i,3))**2)
+        r36(i)= sqrt ((x(i,3)-x(i,6))**2+(y(i,3)-y(i,6))**2&
+        +(z(i,3)-z(i,6))**2)
+        r89(i)= sqrt ((x(i,8)-x(i,9))**2+(y(i,8)-y(i,9))**2&
+        +(z(i,8)-z(i,9))**2)
+        r1112(i)= sqrt ((x(i,11)-x(i,12))**2+(y(i,11)-y(i,12))**2&
+        +(z(i,11)-z(i,12))**2)
+!       C-N    (backbone)
+        r67(i)= sqrt ((x(i,6)-x(i,7))**2+(y(i,6)-y(i,7))**2&
+        +(z(i,6)-z(i,7))**2)
+        r910(i)= sqrt ((x(i,9)-x(i,10))**2+(y(i,9)-y(i,10))**2&
+        +(z(i,9)-z(i,10))**2)
+!       N-C     (backbone)
+        r78(i)= sqrt ((x(i,7)-x(i,8))**2+(y(i,7)-y(i,8))**2&
+        +(z(i,7)-z(i,8))**2)
+        r1011(i)= sqrt ((x(i,10)-x(i,11))**2+(y(i,10)-y(i,11))**2&
+        +(z(i,10)-z(i,11))**2)
+!       sidechain
+        r815=sqrt ((x(i,8)-x(i,15))**2+(y(i,8)-y(i,15))**2&
+        +(z(i,8)-z(i,15))**2)
+        r1516=sqrt ((x(i,15)-x(i,16))**2+(y(i,15)-y(i,16))**2&
+        +(z(i,15)-z(i,16))**2)
+        r1617=sqrt ((x(i,17)-x(i,16))**2+(y(i,17)-y(i,16))**2&
+        +(z(i,17)-z(i,16))**2)
+        r1518=sqrt ((x(i,15)-x(i,18))**2+(y(i,15)-y(i,18))**2&
+        +(z(i,15)-z(i,18))**2)
+        r1120(i)= sqrt ((x(i,11)-x(i,20))**2+(y(i,11)-y(i,20))**2&
+        +(z(i,11)-z(i,20))**2)
+        r2021(i)= sqrt ((x(i,21)-x(i,20))**2+(y(i,21)-y(i,20))**2&
+        +(z(i,21)-z(i,20))**2)
+        r2122(i)= sqrt ((x(i,21)-x(i,22))**2+(y(i,21)-y(i,22))**2&
+        +(z(i,21)-z(i,22))**2)
+        r2223(i)= sqrt ((x(i,23)-x(i,22))**2+(y(i,23)-y(i,22))**2&
+        +(z(i,23)-z(i,22))**2)
+!       C-N(NH3+)
+        r34(i)= sqrt ((x(i,3)-x(i,4))**2+(y(i,3)-y(i,4))**2&
+        +(z(i,3)-z(i,4))**2)
+        r2324(i)= sqrt ((x(i,23)-x(i,24))**2+(y(i,23)-y(i,24))**2&
+        +(z(i,23)-z(i,24))**2)
+!       Proton transfer
+!       O-H bonds (C-OO-H)
+        r528(i)=sqrt ((x(i,5)-x(i,28))**2+(y(i,5)-y(i,28))**2&
+        +(z(i,5)-z(i,28))**2)
+        r2559(i)=sqrt ((x(i,25)-x(i,59))**2+(y(i,25)-y(i,59))**2&
+        +(z(i,25)-z(i,59))**2)
+!       N-H bonds (NH3+)
+        r456(i)=sqrt ((x(i,4)-x(i,56))**2+(y(i,4)-y(i,56))**2&
+        +(z(i,4)-z(i,56))**2)
+        r457(i)=sqrt ((x(i,4)-x(i,57))**2+(y(i,4)-y(i,57))**2&
+         +(z(i,4)-z(i,57))**2)
+        r458(i)=sqrt ((x(i,4)-x(i,58))**2+(y(i,4)-y(i,58))**2&
+         +(z(i,4)-z(i,58))**2)
+
+        r2453(i)=sqrt ((x(i,24)-x(i,53))**2+(y(i,24)-y(i,53))**2&
+         +(z(i,24)-z(i,53))**2)
+        r2454(i)=sqrt ((x(i,24)-x(i,54))**2+(y(i,24)-y(i,54))**2&
+         + (z(i,24)-z(i,54))**2)
+        r2455(i)=sqrt ((x(i,24)-x(i,55))**2+(y(i,24)-y(i,55))**2&
+        +(z(i,24)-z(i,55))**2)
+!        write(6,91) r12(i), r23(i), r36(i), r89(i), r1112(i), r67(i),&
+!        r910(i), r78(i), r1011(i), r815(i),r1516(i), r1518(i),&
+!        r1617(i), r1120(i),r2021(i),r2122(i),r2223(i),r34(i),r2324(i),&
+!        r528(i), r2559(i), r456(i), r457(i), r458(i), r2453(i),&
+!       r2454(i) ,r2455(i)
+!        write(6,*) "C-N, N-C backbone"
+!        write(6,92) r67(i), r910(i), r78(i), r1011(i)
+!        write (6,*) "side chain C-C"
+!        write(6,93) r815(i),r1120(i), r1516(i),r1518(i), r1617(i),&
+!        r2021(i), r2122(i), r2223(i)
+!        write (6,*) "C-N(NH3+)"
+        write (17,*) r12(i)
+!        write (6,*) r34(i),r2324(i)
+91      format (27f9.3)
+!92      format (4f10.5)
+!93      format (8f10.5)
+!94      format (2f10.5)
+!        endif
+!        enddo
+!
+!        enddo
+        enddo
+!
+        stop
+        end
